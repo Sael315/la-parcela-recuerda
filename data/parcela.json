@@ -1,0 +1,11 @@
+{
+  "etiqueta": "EJEMPLO",
+  "nombre": "Parcela piloto",
+  "agricultor": { "nombre": "PENDIENTE", "frase": "PENDIENTE", "foto": null, "permiso_uso": false },
+  "comunidad": "Mao, Valverde",
+  "centro": { "lat": 19.5517, "lon": -71.0781 },
+  "poligono_geojson": { "type": "Polygon", "coordinates": [[[-71.0800, 19.5500], [-71.0760, 19.5500], [-71.0760, 19.5530], [-71.0800, 19.5530], [-71.0800, 19.5500]]] },
+  "area_tareas": null,
+  "cultivo_actual": "arroz",
+  "plagas_repetidas": { "valor": false, "etiqueta": "EJEMPLO" }
+}

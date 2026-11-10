@@ -1,0 +1,43 @@
+[
+  { "id": "ph_muy_alto", "tipo": "seguridad", "viene_de": "Nuevo",
+    "cuando": [ { "senal": "ph", ">=": "@ph_muy_alto" } ],
+    "alertar": "El pH es muy alto: puede haber exceso de sodio. Consulta a un técnico antes de sembrar cultivos delicados.",
+    "alertar_en": "The pH is very high: there may be too much sodium. Talk to a technician before planting sensitive crops.",
+    "excluir": ["habichuela"] },
+
+  { "id": "sal_alta", "tipo": "cultivo", "viene_de": "CambiaCosecha",
+    "cuando": [ { "senal": "sal_dsm", ">=": "@sal_alta_dsm" } ],
+    "sumar": { "sorgo": 3, "caupi": 2 }, "excluir_por_umbral_sal": true,
+    "razon": "Tu tierra tiene mucha sal ({sal_dsm} dS/m).",
+    "razon_en": "Your soil has a lot of salt ({sal_dsm} dS/m)." },
+
+  { "id": "tierra_cansada", "tipo": "cultivo", "viene_de": "Finca Viva + Nuevo",
+    "cuando": [ { "senal": "tendencia_vigor", "==": "bajando" }, { "senal": "ultimo_anio_seco", "==": false } ],
+    "sumar": { "habichuela": 2, "caupi": 2, "gandul": 2, "cobertura": 1 },
+    "razon": "La fuerza del cultivo viene bajando aunque llovió normal: señal de tierra cansada.",
+    "razon_en": "Crop strength keeps going down even though rain was normal: a sign of tired soil." },
+
+  { "id": "anio_seco", "tipo": "cultivo", "viene_de": "Nuevo",
+    "cuando": [ { "senal": "ultimo_anio_seco", "==": true } ],
+    "sumar": { "sorgo": 2, "gandul": 1 },
+    "razon": "El último ciclo fue seco; el cultivo débil probablemente fue por la sequía, no por la tierra.",
+    "razon_en": "The last cycle was dry; the weak crop was probably due to drought, not the soil." },
+
+  { "id": "mucho_arroz", "tipo": "cultivo", "viene_de": "CambiaCosecha",
+    "cuando": [ { "senal": "ciclos_arroz_seguidos", ">=": "@ciclos_arroz_muchos" }, { "senal": "sal_dsm", "<": "@sal_alta_dsm" } ],
+    "sumar": { "habichuela": 3, "gandul": 2, "caupi": 1 },
+    "razon": "Llevas {ciclos_arroz_seguidos} ciclos de arroz seguidos; una leguminosa devuelve nitrógeno al suelo.",
+    "razon_en": "You've planted {ciclos_arroz_seguidos} rice cycles in a row; a legume returns nitrogen to the soil." },
+
+  { "id": "mucho_descubierto", "tipo": "cultivo", "viene_de": "CambiaCosecha + Finca Viva",
+    "cuando": [ { "senal": "dias_descubierto_promedio", ">=": "@dias_descubierto_muchos" } ],
+    "sumar": { "cobertura": 3 },
+    "razon": "La tierra queda unos {dias_descubierto_promedio} días descubierta después de cosechar.",
+    "razon_en": "The soil stays bare for about {dias_descubierto_promedio} days after harvest." },
+
+  { "id": "plaga_repetida", "tipo": "cultivo", "viene_de": "Finca Viva",
+    "cuando": [ { "senal": "plagas_repetidas", "==": true } ],
+    "sumar": { "sorgo": 1, "caupi": 1, "gandul": 1 },
+    "razon": "Has tenido plagas repetidas: cambiar de familia de cultivo rompe su ciclo.",
+    "razon_en": "You've had repeated pests: switching crop family breaks their cycle." }
+]

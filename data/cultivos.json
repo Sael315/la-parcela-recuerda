@@ -1,0 +1,44 @@
+{
+  "pendiente_validar": true,
+  "cultivos": {
+    "sorgo": {
+      "nombre": "Sorgo", "nombre_en": "Sorghum", "icono": "🌾", "familia": "gramínea", "umbral_sal_dsm": 6.8,
+      "puntaje": { "ahorrar_agua": 3, "mejorar_suelo": 1, "proteger_rendimiento": 2 },
+      "beneficio": "Aguanta la sal y la sequía.", "beneficio_en": "Tolerates salt and drought.",
+      "limite": "No devuelve nitrógeno al suelo.", "limite_en": "It doesn't return nitrogen to the soil.",
+      "fuente_umbral": "FAO, Ayers y Westcot (riego y drenaje 29) — por confirmar"
+    },
+    "caupi": {
+      "nombre": "Caupí (frijol de costa)", "nombre_en": "Cowpea", "icono": "🫘", "familia": "leguminosa", "umbral_sal_dsm": 4.9,
+      "puntaje": { "ahorrar_agua": 3, "mejorar_suelo": 3, "proteger_rendimiento": 2 },
+      "beneficio": "Devuelve nitrógeno y tolera algo de sal.", "beneficio_en": "Returns nitrogen and tolerates some salt.",
+      "limite": "Menos conocido en la zona; confirmar mercado.", "limite_en": "Less known in the area; check the market first.",
+      "fuente_umbral": "FAO 29 — por confirmar"
+    },
+    "habichuela": {
+      "nombre": "Habichuela negra", "nombre_en": "Black bean", "icono": "🫘", "familia": "leguminosa", "umbral_sal_dsm": 1.0,
+      "puntaje": { "ahorrar_agua": 2, "mejorar_suelo": 3, "proteger_rendimiento": 3 },
+      "beneficio": "Devuelve nitrógeno y usa mucha menos agua que el arroz inundado.", "beneficio_en": "Returns nitrogen and uses much less water than flooded rice.",
+      "limite": "Muy sensible a la sal.", "limite_en": "Very sensitive to salt.",
+      "fuente_umbral": "FAO 29 — por confirmar"
+    },
+    "gandul": {
+      "nombre": "Gandul", "nombre_en": "Pigeon pea", "icono": "🌱", "familia": "leguminosa", "umbral_sal_dsm": null,
+      "puntaje": { "ahorrar_agua": 3, "mejorar_suelo": 3, "proteger_rendimiento": 2 },
+      "beneficio": "Devuelve nitrógeno y aguanta la sequía.", "beneficio_en": "Returns nitrogen and tolerates drought.",
+      "limite": "Su tolerancia a la sal está por confirmar con el profesor.", "limite_en": "Its salt tolerance is still to be confirmed with the teacher.",
+      "fuente_umbral": "PENDIENTE"
+    },
+    "cobertura": {
+      "nombre": "Leguminosa de cobertura", "nombre_en": "Legume cover crop", "icono": "🍀", "familia": "leguminosa", "umbral_sal_dsm": null,
+      "puntaje": { "ahorrar_agua": 2, "mejorar_suelo": 3, "proteger_rendimiento": 1 },
+      "beneficio": "Tapa y protege la tierra descubierta.", "beneficio_en": "Covers and protects bare soil.",
+      "limite": "No es un cultivo para vender.", "limite_en": "It's not a cash crop.",
+      "fuente_umbral": "PENDIENTE"
+    }
+  },
+  "impacto_3_temporadas": {
+    "agua_ahorro_pct_rotando": { "valor": null, "fuente": null },
+    "urea_ahorro_pct_rotando": { "valor": null, "fuente": null }
+  }
+}

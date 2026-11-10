@@ -1,0 +1,10 @@
+{
+  "pendiente_validar": true,
+  "ph_muy_alto": 8.5,
+  "ph_muy_bajo": 5.0,
+  "sal_media_dsm": 2.0,
+  "sal_alta_dsm": 4.0,
+  "ciclos_arroz_muchos": 2,
+  "dias_descubierto_muchos": 60,
+  "anio_seco_fraccion": 0.8
+}

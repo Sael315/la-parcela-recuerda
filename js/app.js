@@ -1,6 +1,7 @@
 // Arranque, navegación entre pantallas y carga de datos.
 
 import { cargarTextos, idiomaInicial, setIdioma, getIdioma, t, aplicarTextos, esc } from './i18n.js';
+import { cargarDatos } from './datos.js';
 
 const PANTALLAS = ['parcela', 'suelo', 'decision'];
 
@@ -42,10 +43,34 @@ function pintar() {
   document.getElementById('pantalla-decision').innerHTML = encabezado('titulo-decision', t('p3.chip'), t('p3.titulo'), t('p3.intro'));
 }
 
+function franjaEjemplo(datos) {
+  const hay = [datos.parcela, datos.historia, datos.clima, datos.suelo.ph, datos.suelo.sal_dsm]
+    .some((d) => d.etiqueta === 'EJEMPLO');
+  document.getElementById('franja-ejemplo').hidden = !hay;
+}
+
+function mostrarError(err) {
+  document.getElementById('cargando').hidden = true;
+  const caja = document.getElementById('error-carga');
+  caja.hidden = false;
+  const archivo = err.archivo || 'data/';
+  // Sin textos cargados, el mensaje sale en español.
+  caja.innerHTML = `<strong>${esc(t('error.titulo') === 'error.titulo' ? 'Faltan datos' : t('error.titulo'))}</strong>
+    <span>${esc(t('error.datos') === 'error.datos' ? `No pudimos cargar ${archivo}. Recarga la página.` : t('error.datos', { archivo }))}</span>`;
+  console.error(err);
+}
+
 async function iniciar() {
-  const resp = await fetch('data/textos.json');
-  cargarTextos(await resp.json());
-  setIdioma(idiomaInicial('es'));
+  let datos;
+  try {
+    datos = await cargarDatos();
+  } catch (err) {
+    mostrarError(err);
+    return;
+  }
+  cargarTextos(datos.textos);
+  setIdioma(idiomaInicial(datos.config.idioma_por_defecto));
+  franjaEjemplo(datos);
   pintar();
   document.getElementById('cargando').hidden = true;
   mostrarPantalla(pantallaDesdeHash());

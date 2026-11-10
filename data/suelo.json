@@ -1,0 +1,4 @@
+{
+  "ph": { "valor": 7.2, "etiqueta": "EJEMPLO", "fuente": "SoilGrids 2.0 (ISRIC)", "profundidad": "0-5 cm", "consultado": null },
+  "sal_dsm": { "valor": 2.0, "etiqueta": "EJEMPLO", "fuente": "Simulado hasta tener una medición" }
+}
