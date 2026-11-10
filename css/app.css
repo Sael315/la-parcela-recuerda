@@ -24,6 +24,7 @@
   --ambar-borde: #F0C773;
   --rojo: #A3361F;
   --rojo-fondo: #FCEAE5;
+  --lluvia: #6B93BD;
 
   /* Etiquetas de origen */
   --etq-obs-fondo: #E3EFD8;  --etq-obs-texto: #2C551A;
@@ -84,6 +85,7 @@
     --ambar-borde: #6E5320;
     --rojo: #F29B85;
     --rojo-fondo: #35190F;
+    --lluvia: #84A9D3;
 
     --etq-obs-fondo: #23391A;  --etq-obs-texto: #B9E09A;
     --etq-est-fondo: #3A2C0E;  --etq-est-texto: #F6CF7E;
@@ -405,6 +407,33 @@ main, main:focus, main:focus-visible { display: block; outline: none; }
   font-size: var(--t-xs); color: var(--tinta-suave);
 }
 .pie a { font-weight: 600; justify-self: start; min-height: var(--toque); display: inline-flex; align-items: center; }
+
+/* ---------- Pantalla 1: Mi parcela ---------- */
+.mapa { height: 280px; border-radius: var(--radio-m); overflow: hidden; background: var(--tarjeta); border: 1px solid var(--borde); z-index: 0; }
+@media (min-width: 768px) { .mapa { height: 340px; } }
+.leaflet-container { font-family: var(--fuente); }
+.ayuda { max-width: 68ch; margin-bottom: var(--e-4); }
+.grafico { display: grid; gap: var(--e-2); padding: var(--e-4); }
+.lienzo { position: relative; width: 100%; }
+.lienzo-alto { height: 240px; }
+.lienzo-bajo { height: 90px; }
+@media (min-width: 768px) { .lienzo-alto { height: 300px; } .lienzo-bajo { height: 110px; } }
+.grafico-sub { font-size: var(--t-xs); font-weight: 600; color: var(--tinta-suave); padding-left: 48px; margin-top: var(--e-2); }
+.grafico-pie { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-5); padding-top: var(--e-3); border-top: 1px solid var(--borde); }
+#h-ver[hidden] { display: none; }
+
+.confirmar { display: grid; gap: var(--e-4); }
+.corregir { display: grid; gap: var(--e-2); }
+.corregir[hidden] { display: none; }
+.corregir label { font-size: var(--t-s); font-weight: 500; }
+.corregir-fila { display: flex; flex-wrap: wrap; gap: var(--e-3); }
+.corregir input {
+  width: 6.5rem; min-height: var(--toque); padding: 0 var(--e-3);
+  border: 1px solid var(--borde); border-radius: var(--radio-s);
+  background: var(--tarjeta-alta); font-size: var(--t-l);
+}
+#h-estado .etq { margin-left: var(--e-1); }
+.confirmar + .limite { margin-top: var(--e-4); }
 
 /* ---------- Pantalla 3: Qué siembro ---------- */
 .bloque-primero { margin-top: var(--e-5); }
