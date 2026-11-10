@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pruebas del motor — La parcela recuerda</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #171A15; background: #fff; }
+    li { margin: 0.4rem 0; }
+    .ok { color: #2C551A; } .mal { color: #A3361F; }
+    code { background: #F3F3F0; padding: 0 0.3rem; border-radius: 4px; }
+    #resumen { font-weight: 700; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>Pruebas del motor de reglas</h1>
+  <p>Usa los archivos reales <code>data/reglas.json</code>, <code>data/cultivos.json</code> y <code>data/umbrales.json</code>.</p>
+  <p id="resumen" role="status">Corriendo…</p>
+  <ol id="lista"></ol>
+
+  <script type="module">
+    import { recomendar } from '../js/motor.js';
+    import { ultimoCicloSeco } from '../js/senales.js';
+
+    const leer = (n) => fetch(`../data/${n}.json`).then((r) => r.json());
+    const [reglas, cultivos, umbrales] = await Promise.all(['reglas', 'cultivos', 'umbrales'].map(leer));
+    const ids = (r) => r.opciones.map((o) => o.id);
+    const LEGUMINOSAS = ['habichuela', 'gandul', 'caupi'];
+
+    const casos = [
+      ['Sal 6 dS/m → no recomienda habichuela; sorgo está entre las 2 opciones', () => {
+        const r = recomendar({ sal_dsm: 6 }, reglas, cultivos, umbrales, 'mejorar_suelo');
+        return !ids(r).includes('habichuela') && ids(r).includes('sorgo');
+      }],
+      ['Sal 1, 5 ciclos de arroz, sin sequía, vigor bajando → aparece una leguminosa', () => {
+        const r = recomendar({ sal_dsm: 1, ciclos_arroz_seguidos: 5, ultimo_anio_seco: false, tendencia_vigor: 'bajando' }, reglas, cultivos, umbrales, 'mejorar_suelo');
+        return ids(r).some((id) => LEGUMINOSAS.includes(id));
+      }],
+      ['pH 8.8 → hay una alerta y la habichuela queda excluida', () => {
+        const r = recomendar({ ph: 8.8 }, reglas, cultivos, umbrales, 'proteger_rendimiento');
+        return r.alertas.length > 0 && !ids(r).includes('habichuela') && r.excluidos.some((e) => e.id === 'habichuela');
+      }],
+      ['Último año seco + vigor bajando → no se activa tierra_cansada; sí anio_seco', () => {
+        const r = recomendar({ ultimo_anio_seco: true, tendencia_vigor: 'bajando' }, reglas, cultivos, umbrales, 'mejorar_suelo');
+        return !r.reglasActivadas.includes('tierra_cansada') && r.reglasActivadas.includes('anio_seco');
+      }],
+      ['Sin señales → recomendación por defecto, sin errores', () => {
+        const r = recomendar({}, reglas, cultivos, umbrales, 'mejorar_suelo');
+        return r.porDefecto && r.opciones.length === 2 && r.opciones.every((o) => o.cultivo.familia === 'leguminosa');
+      }],
+      ['Cambiar la prioridad cambia el orden entre opciones empatadas', () => {
+        // tierra_cansada da +2 a habichuela, caupí y gandul: quedan empatados en puntos de reglas.
+        const senales = { tendencia_vigor: 'bajando', ultimo_anio_seco: false };
+        const agua = recomendar(senales, reglas, cultivos, umbrales, 'ahorrar_agua');
+        const cosecha = recomendar(senales, reglas, cultivos, umbrales, 'proteger_rendimiento');
+        return ids(agua)[0] !== ids(cosecha)[0];
+      }],
+      // Extras
+      ['Extra: umbral de sal nulo (gandul) se excluye con sal media', () => {
+        const r = recomendar({ sal_dsm: 3, ciclos_arroz_seguidos: 5 }, reglas, cultivos, umbrales, 'ahorrar_agua');
+        return !ids(r).includes('gandul') && r.excluidos.some((e) => e.id === 'gandul' && e.motivo === 'sin_dato_sal');
+      }],
+      ['Extra: las razones llevan la etiqueta de la señal que las produjo', () => {
+        const r = recomendar({ ciclos_arroz_seguidos: { valor: 5, etiqueta: 'REPORTADO' }, sal_dsm: { valor: 1, etiqueta: 'SIMULADO' } }, reglas, cultivos, umbrales, 'mejorar_suelo');
+        const razon = r.opciones[0].razones.find((x) => x.regla === 'mucho_arroz');
+        return razon && razon.texto.includes('5 ciclos') && razon.senales.some((s) => s.etiqueta === 'REPORTADO');
+      }],
+      ['Extra: ultimoCicloSeco compara con el 80 % del promedio', () => {
+        const ciclos = [{ ciclo: 1, mm: 400 }, { ciclo: 2, mm: 400 }, { ciclo: 3, mm: 250 }];
+        return ultimoCicloSeco(ciclos, 0.8) === true && ultimoCicloSeco(ciclos.slice(0, 2), 0.8) === false && ultimoCicloSeco([], 0.8) === null;
+      }],
+    ];
+
+    const lista = document.getElementById('lista');
+    let pasan = 0;
+    for (const [nombre, prueba] of casos) {
+      let ok = false, detalle = '';
+      try { ok = prueba() === true; } catch (e) { detalle = ` (error: ${e.message})`; }
+      if (ok) pasan++;
+      const li = document.createElement('li');
+      li.className = ok ? 'ok' : 'mal';
+      li.textContent = `${ok ? '✔' : '✘'} ${nombre}${detalle}`;
+      lista.append(li);
+    }
+    const resumen = document.getElementById('resumen');
+    resumen.textContent = `${pasan} de ${casos.length} pruebas pasan`;
+    resumen.className = pasan === casos.length ? 'ok' : 'mal';
+    document.body.dataset.resultado = pasan === casos.length ? 'ok' : 'mal';
+  </script>
+</body>
+</html>
