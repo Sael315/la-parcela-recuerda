@@ -435,6 +435,23 @@ main, main:focus, main:focus-visible { display: block; outline: none; }
 #h-estado .etq { margin-left: var(--e-1); }
 .confirmar + .limite { margin-top: var(--e-4); }
 
+/* ---------- Pantalla 2: Mi suelo ---------- */
+.sensor {
+  display: flex; align-items: center; gap: var(--e-3);
+  margin-bottom: var(--e-4); padding: var(--e-3) var(--e-4);
+  border-radius: var(--radio-pildora);
+  background: var(--fondo-suave); border: 1px solid var(--borde);
+  font-size: var(--t-s);
+}
+.sensor-punto { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--tinta-suave); }
+.sensor[data-estado="vivo"] .sensor-punto { background: var(--verde); box-shadow: 0 0 0 4px var(--verde-tinte); }
+.sensor[data-estado="sin_conexion"] .sensor-punto { background: var(--ambar); }
+.cifra .cifra-nombre:first-child { font-weight: 600; color: var(--tinta); }
+.aviso-texto { color: var(--ambar); }
+.frase-grande { font-size: var(--t-l); font-weight: 400; letter-spacing: -0.01em; max-width: 40ch; margin-bottom: var(--e-4); }
+.lienzo-medio { height: 260px; }
+@media (min-width: 768px) { .lienzo-medio { height: 320px; } }
+
 /* ---------- Pantalla 3: Qué siembro ---------- */
 .bloque-primero { margin-top: var(--e-5); }
 .pila { display: grid; gap: var(--e-3); }

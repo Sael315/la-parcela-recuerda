@@ -353,7 +353,8 @@ export function actualizar(contenedor, ctx) {
     estadoTxt.textContent = t('p1.gracias_si');
   } else if (conf.respuesta && Number.isInteger(conf.ciclos)) {
     corregir.hidden = false;
-    el.querySelector('#h-ciclos').value = String(conf.ciclos);
+    const input = el.querySelector('#h-ciclos');
+    if (document.activeElement !== input) input.value = String(conf.ciclos);
     estadoTxt.innerHTML = `${esc(t('p1.usando_correccion', { n: conf.ciclos }))} ${etiqueta('REPORTADO')}`;
   } else {
     estadoTxt.textContent = '';
