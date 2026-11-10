@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "author": "Equipo INPONOR",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "potPh", "top": -40, "left": 220, "attrs": { "label": "pH" } },
+    { "type": "wokwi-potentiometer", "id": "potSal", "top": 110, "left": 220, "attrs": { "label": "Sal" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "potPh:VCC", "esp:3V3", "red", [ "v0" ] ],
+    [ "potPh:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "potPh:SIG", "esp:34", "green", [ "v0" ] ],
+    [ "potSal:VCC", "esp:3V3", "red", [ "v0" ] ],
+    [ "potSal:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "potSal:SIG", "esp:35", "blue", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
