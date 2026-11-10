@@ -177,8 +177,16 @@ export function recomendar(senales, reglas, cultivos, umbrales, prioridad = 'mej
   candidatos.forEach((e) => { e.puntaje = e.puntosReglas + puntajePrioridad(e); });
   candidatos.sort(ordenar);
 
+  const sal = s.sal_dsm?.valor;
+  const salMedia = !faltante(sal) && sal >= umbrales.sal_media_dsm;
+
   const opciones = candidatos.slice(0, 2).map((e) => {
     const razones = [...e.razones];
+    // Con sal media o alta, decir que este cultivo la aguanta (si no lo dice ya una regla de sal).
+    const u = e.cultivo.umbral_sal_dsm;
+    if (salMedia && Number.isFinite(u) && u >= sal && !e.reglas.some((r) => r.id === 'sal_alta')) {
+      razones.unshift({ clave: 'p3.razon_aguanta_sal', vars: { u, sal }, senales: [{ senal: 'sal_dsm', etiqueta: s.sal_dsm.etiqueta ?? null }], regla: null });
+    }
     if (puntajePrioridad(e) >= 3) {
       razones.push({ clave: 'p3.razon_prioridad', vars: { prioridad }, senales: [{ senal: 'prioridad', etiqueta: 'REPORTADO' }], regla: null });
     }
@@ -193,6 +201,8 @@ export function recomendar(senales, reglas, cultivos, umbrales, prioridad = 'mej
       limite: e.cultivo.limite ?? '',
       limite_en: e.cultivo.limite_en ?? e.cultivo.limite ?? '',
       reglas: e.reglas,
+      // De dónde sale: reglas, recomendación por defecto o solo el filtro de sal.
+      origen: e.reglas.length ? 'reglas' : (porDefecto ? 'defecto' : 'sal'),
     };
   });
 

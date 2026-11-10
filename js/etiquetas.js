@@ -16,6 +16,22 @@ export function etiqueta(tipo) {
 }
 
 /**
+ * Encabezado de pantalla al estilo VERDA: píldora a la izquierda y titular ligero.
+ * @param {string} id  id del h2 (para aria-labelledby)
+ */
+export function encabezado(id, chip, titulo, intro) {
+  return `<header class="encabezado">
+    <span class="pildora">${esc(chip)}</span>
+    <div><h2 id="${id}">${esc(titulo)}</h2><p>${esc(intro)}</p></div>
+  </header>`;
+}
+
+/** Etiquetas distintas de una lista, sin nulos. */
+export function etiquetasUnicas(lista) {
+  return [...new Set(lista.filter(Boolean))];
+}
+
+/**
  * Etiqueta + fuente + fecha, en una línea pequeña.
  * @param {{etiqueta: string, fuente?: string|null, fecha?: string|null}} dato
  * @returns {string} HTML
