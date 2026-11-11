@@ -412,6 +412,7 @@ main, main:focus, main:focus-visible { display: block; outline: none; }
 .mapa { height: 280px; border-radius: var(--radio-m); overflow: hidden; background: var(--tarjeta); border: 1px solid var(--borde); z-index: 0; }
 @media (min-width: 768px) { .mapa { height: 340px; } }
 .leaflet-container { font-family: var(--fuente); }
+.leaflet-touch .leaflet-bar a, .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 22px; }
 .ayuda { max-width: 68ch; margin-bottom: var(--e-4); }
 .grafico { display: grid; gap: var(--e-2); padding: var(--e-4); }
 .lienzo { position: relative; width: 100%; }

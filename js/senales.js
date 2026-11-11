@@ -47,7 +47,7 @@ export function calcularSenales(datos, { lectura = null, confirmacion = null } =
   if (lectura && Number.isFinite(lectura.sal)) {
     s.sal_dsm = { valor: lectura.sal, etiqueta: 'SIMULADO', fuente: 'ThingSpeak (Wokwi)', fecha: lectura.hora };
   } else {
-    s.sal_dsm = { valor: suelo.sal_dsm?.valor ?? null, etiqueta: suelo.sal_dsm?.etiqueta ?? 'EJEMPLO', fuente: suelo.sal_dsm?.fuente ?? null, fecha: null };
+    s.sal_dsm = { valor: suelo.sal_dsm?.valor ?? null, etiqueta: suelo.sal_dsm?.etiqueta ?? 'EJEMPLO', fuente: suelo.sal_dsm?.fuente ?? null, fuente_en: suelo.sal_dsm?.fuente_en ?? null, fecha: null };
   }
 
   // Ciclos de arroz seguidos: corrección del agricultor → historia.json

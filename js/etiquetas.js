@@ -1,7 +1,7 @@
 // Etiquetas de origen: OBSERVADO, ESTIMADO, REPORTADO, SIMULADO, EJEMPLO.
 // Siempre llevan la palabra escrita; el color solo ayuda.
 
-import { t, esc, fecha } from './i18n.js';
+import { t, esc, fecha, getIdioma } from './i18n.js';
 
 export const ETIQUETAS = ['OBSERVADO', 'ESTIMADO', 'REPORTADO', 'SIMULADO', 'EJEMPLO'];
 
@@ -38,7 +38,8 @@ export function etiquetasUnicas(lista) {
  */
 export function meta(dato) {
   const partes = [];
-  if (dato.fuente) partes.push(esc(dato.fuente));
+  const fuente = getIdioma() === 'en' && dato.fuente_en ? dato.fuente_en : dato.fuente;
+  if (fuente) partes.push(esc(fuente));
   if (dato.fecha) partes.push(esc(fecha(dato.fecha)));
   return `<span class="meta">${etiqueta(dato.etiqueta)}${partes.length ? `<span>${partes.join(', ')}</span>` : ''}</span>`;
 }

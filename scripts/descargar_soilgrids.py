@@ -81,7 +81,7 @@ def main():
                 {"profundidad": p.replace("cm", " cm").replace("-", "-"), "valor": valores.get(p), "etiqueta": "ESTIMADO"} for p in PROFUNDIDADES
             ],
         },
-        "sal_dsm": anterior.get("sal_dsm") or {"valor": 2.0, "etiqueta": "EJEMPLO", "fuente": "Simulado hasta tener una medición"},
+        "sal_dsm": anterior.get("sal_dsm") or {"valor": 2.0, "etiqueta": "EJEMPLO", "fuente": "Simulado hasta tener una medición", "fuente_en": "Simulated until there is a field measurement"},
     }
     Path(a.salida).write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"pH 0-5 cm: {valores.get('0-5cm')} · 5-15 cm: {valores.get('5-15cm')} (ESTIMADO, ~250 m)")

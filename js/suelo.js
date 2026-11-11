@@ -145,7 +145,7 @@ export function actualizar(contenedor, ctx) {
       <span class="cifra-nombre">${esc(t('p2.sal'))}</span>
       <span class="cifra-valor">${esc(num(sal.valor, 1))}<small>dS/m</small></span>
       <span class="cifra-palabra">${esc(palabraSal(sal.valor, umbrales))}</span>
-      ${meta({ etiqueta: sal.etiqueta, fuente: sal.fuente })}
+      ${meta({ etiqueta: sal.etiqueta, fuente: sal.fuente, fuente_en: sal.fuente_en })}
     </div>
     <div class="tarjeta cifra">
       <span class="cifra-nombre">${esc(t('p2.humedad'))}</span>

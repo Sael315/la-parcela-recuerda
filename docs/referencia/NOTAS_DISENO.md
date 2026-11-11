@@ -58,3 +58,13 @@ De línea, trazo de ≈ 1.5 px, verdes, sin relleno (gráfico, bombilla, escudo,
 - El simulador "¿Qué pasaría si…?" usa el estilo del acordeón FAQ.
 - Lo que VERDA no tiene y la especificación exige: franja de EJEMPLO, cajas de alerta ámbar, botones de al menos 44 px, foco visible y modo oscuro (paleta de monte nocturno: fondo `#11170F`, tarjetas `#1A2317`, verde `#8DBE62`).
 - Fuente: Plus Jakarta Sans, cargada desde Google Fonts. No es de pago, así que no hace falta alternativa.
+
+## Comparación con la referencia
+
+Capturas de la app en `docs/referencia/app/` (390 px y 1280 px, claro y oscuro), para ponerlas junto a las de VERDA. Lo que se mantiene del lenguaje visual:
+
+- barra de navegación blanca flotante con la pestaña activa en píldora verde (en celular, abajo);
+- hero oscuro de campos vistos desde arriba con una ficha translúcida, como la tarjeta "Harvest" de VERDA;
+- titulares grandes y ligeros, cifras grandes con su etiqueta pequeña debajo;
+- tarjetas gris claro sin sombra, píldoras de sección, botones en píldora verde e íconos de línea verdes;
+- el simulador con el estilo del acordeón FAQ.
