@@ -2,7 +2,7 @@
   "app_url": "https://sael315.github.io/la-parcela-recuerda/",
   "thingspeak": {
     "habilitado": true,
-    "canal_id": "PENDIENTE",
+    "canal_id": "3573977",
     "campo_ph": "field1",
     "campo_sal": "field2",
     "intervalo_ms": 15000,

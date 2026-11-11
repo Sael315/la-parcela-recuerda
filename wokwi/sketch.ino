@@ -12,7 +12,7 @@
 #include <WiFiClientSecure.h>
 
 // ---------- Configuración ----------
-const char* THINGSPEAK_WRITE_KEY = "HDKL0DBBGVJB9T8G";  // clave de escritura (Write API Key) del canal de demo
+const char* THINGSPEAK_WRITE_KEY = "PEGAR_AQUI";  // clave de escritura (Write API Key) del canal de demo
 
 const char* WIFI_RED = "Wokwi-GUEST";  // red simulada de Wokwi, sin contraseña
 const char* WIFI_CLAVE = "";
