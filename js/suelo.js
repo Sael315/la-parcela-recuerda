@@ -133,12 +133,16 @@ export function actualizar(contenedor, ctx) {
     ? `<span class="cifra-extra">${esc(t('p2.ph_zona', { v: num(suelo.ph.valor, 1) }))} ${etiqueta(suelo.ph.etiqueta)}</span>` : '';
 
   const metaPh = { etiqueta: ph.etiqueta, fuente: ph.fuente, fecha: ph.etiqueta === 'SIMULADO' ? null : ph.fecha };
+  // Con parcela propia, el pH guardado es el de la parcela piloto.
+  const avisoPhOtra = ctx.parcela?.propia && ph.etiqueta !== 'SIMULADO'
+    ? `<span class="cifra-extra aviso-texto">${esc(t('p2.ph_otra'))}</span>` : '';
   el.querySelector('#s-tarjetas').innerHTML = `
     <div class="tarjeta cifra">
       <span class="cifra-nombre">${esc(t('p2.ph'))}</span>
       <span class="cifra-valor">${esc(num(ph.valor, 1))}</span>
       ${palabraPh ? `<span class="cifra-palabra aviso-texto">${esc(palabraPh)}</span>` : ''}
       ${meta(metaPh)}
+      ${avisoPhOtra}
       ${referenciaPh}
     </div>
     <div class="tarjeta cifra">

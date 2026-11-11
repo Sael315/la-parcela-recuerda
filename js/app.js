@@ -8,6 +8,7 @@ import * as historia from './historia.js';
 import * as suelo from './suelo.js';
 import * as decision from './decision.js';
 import { iniciarSensor } from './thingspeak.js';
+import { leerPropia, guardarPropia, borrarPropia, parcelaActiva } from './parcela.js';
 
 const PANTALLAS = { parcela: historia, suelo, decision };
 const CLAVE_CONFIRMACION = 'lpr.confirmacion';
@@ -20,6 +21,8 @@ const estado = {
   confirmacionGuardada: true,
   sensor: { estado: 'sin_configurar', lectura: null },
   sim: { activo: false, ph: 7, sal: 2, ciclos: 5, seco: false },
+  parcelaPropia: null,          // la que marcó el agricultor en el mapa
+  parcelaGuardada: true,
 };
 
 function leerConfirmacion() {
@@ -35,10 +38,11 @@ function leerConfirmacion() {
 /** Señales reales, señales usadas (con simulador) y recomendación. */
 function contexto() {
   const { datos } = estado;
-  const reales = calcularSenales(datos, { lectura: estado.sensor.lectura, confirmacion: estado.confirmacion });
+  const parcela = parcelaActiva(datos.parcela, estado.parcelaPropia);
+  const reales = calcularSenales(datos, { lectura: estado.sensor.lectura, confirmacion: estado.confirmacion, parcelaPropia: parcela.propia });
   const usadas = estado.sim.activo ? aplicarSimulador(reales, estado.sim) : reales;
   const resultado = recomendar(usadas, datos.reglas, datos.cultivos, datos.umbrales, estado.prioridad);
-  return { datos, estado, reales, usadas, resultado, acciones };
+  return { datos, estado, parcela, reales, usadas, resultado, acciones };
 }
 
 const acciones = {
@@ -55,11 +59,23 @@ const acciones = {
     }
     actualizar();
   },
+  /** Guarda la parcela marcada en el mapa y reconstruye las pantallas (cambian mapa, portada y avisos). */
+  setParcelaPropia(p) {
+    estado.parcelaPropia = p;
+    estado.parcelaGuardada = guardarPropia(p);
+    montar();
+  },
+  borrarParcelaPropia() {
+    estado.parcelaPropia = null;
+    estado.parcelaGuardada = true;
+    borrarPropia();
+    montar();
+  },
 };
 
 function franjaEjemplo(ctx) {
-  const { datos, reales } = ctx;
-  const hay = [datos.parcela, datos.historia, datos.clima].some((d) => d.etiqueta === 'EJEMPLO')
+  const { datos, reales, parcela } = ctx;
+  const hay = [parcela, datos.historia, datos.clima].some((d) => d.etiqueta === 'EJEMPLO')
     || Object.values(reales).some((s) => s.etiqueta === 'EJEMPLO');
   document.getElementById('franja-ejemplo').hidden = !hay;
 }
@@ -125,6 +141,7 @@ async function iniciar() {
   cargarTextos(estado.datos.textos);
   setIdioma(idiomaInicial(estado.datos.config.idioma_por_defecto));
   estado.confirmacion = leerConfirmacion();
+  estado.parcelaPropia = leerPropia();
 
   document.getElementById('cargando').hidden = true;
   montar();

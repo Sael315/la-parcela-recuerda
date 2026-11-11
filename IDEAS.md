@@ -10,13 +10,15 @@ Cosas que parecen útiles pero quedan fuera del alcance de la especificación de
 - **Sensor real de pH y conductividad** en vez del simulado, con la misma ruta ThingSpeak → app.
 - **Descarga automática de HLS** con la API de AppEEARS (requiere guardar credenciales fuera del repositorio).
 - **Comparar con parcelas vecinas** para separar mejor un año malo de la zona de un problema de la parcela.
-- **Elegir mi parcela en el mapa:** diseño completo abajo.
+- **Elegir mi parcela en el mapa:** ✅ construida la versión sin backend (ver abajo). Pendiente: la versión con Supabase.
 
 ---
 
 ## Diseño: "Elegir mi parcela" en el mapa
 
-> Estado: **propuesta, no construida.** Está fuera de la especificación actual (`CLAUDE.md`: 3 pantallas, sin backend, sin funciones extra). Para construirla, primero hay que aprobarla y agregarla a `CLAUDE.md`.
+> Estado: **versión sin backend construida** (aprobada por el equipo y agregada a `CLAUDE.md`, pantalla 1, punto 6). Código en `js/parcela.js` y `js/historia.js`.
+> Diferencia con este diseño: **no hay lista de comunidades** (`comunidades.json`), para no inventar coordenadas. En su lugar hay "Usar mi ubicación" (GPS) e "Ir a Mao". Se puede agregar cuando Agropecuaria dé las coordenadas de cada comunidad.
+> La versión con Supabase (abajo) sigue siendo solo una propuesta.
 
 ### Qué problema resuelve
 

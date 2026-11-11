@@ -2,6 +2,7 @@
 
 import { t, tr, esc, num, getIdioma } from './i18n.js';
 import { encabezado, etiqueta, etiquetasUnicas } from './etiquetas.js';
+import { M2_POR_TAREA } from './parcela.js';
 
 const PRIORIDADES = ['ahorrar_agua', 'mejorar_suelo', 'proteger_rendimiento'];
 
@@ -247,7 +248,8 @@ export function actualizar(contenedor, ctx) {
   const lista = opciones.length
     ? opciones.map((op, i) => `${i + 1}) ${tr(op.cultivo, 'nombre')}: ${tr(op, 'beneficio')}`).join(' ')
     : t('comp.sin_opciones');
-  ultimoMensaje = t('comp.mensaje', { opciones: lista, url: datos.config.app_url });
+  const parcelaTxt = ctx.parcela?.propia ? t('comp.parcela', { tareas: num(ctx.parcela.area_m2 / M2_POR_TAREA) }) : '';
+  ultimoMensaje = t('comp.mensaje', { parcela: parcelaTxt, opciones: lista, url: datos.config.app_url });
   el.querySelector('#d-whatsapp').href = `https://wa.me/?text=${encodeURIComponent(ultimoMensaje)}`;
 }
 

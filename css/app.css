@@ -423,6 +423,50 @@ main, main:focus, main:focus-visible { display: block; outline: none; }
 .grafico-pie { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-5); padding-top: var(--e-3); border-top: 1px solid var(--borde); }
 #h-ver[hidden] { display: none; }
 
+/* Elegir mi parcela */
+.mapa-envoltura { position: relative; }
+.mapa-acciones { margin-top: var(--e-3); }
+.mapa-acciones[hidden] { display: none; }
+.mira {
+  position: absolute; left: 50%; top: 50%; z-index: 500;
+  width: 34px; height: 34px; margin: -17px 0 0 -17px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--tinta), var(--tinta)) center / 2px 100% no-repeat,
+    linear-gradient(var(--tinta), var(--tinta)) center / 100% 2px no-repeat;
+  filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 1px #fff);
+}
+.mira[hidden] { display: none; }
+.editor { display: grid; gap: var(--e-2); padding: var(--e-4); background: var(--tarjeta); border-radius: 0 0 var(--radio-m) var(--radio-m); }
+.editor[hidden] { display: none; }
+.editor h4 { margin: 0; font-size: var(--t-l); font-weight: 500; letter-spacing: -0.01em; }
+.editor-estado { font-weight: 600; font-size: var(--t-s); }
+.editor-avisos { display: grid; gap: var(--e-1); font-size: var(--t-s); color: var(--ambar); }
+.editor-avisos:empty { display: none; }
+.editor-botones { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-2); margin-top: var(--e-2); }
+.editor-botones .boton { padding: 0 var(--e-3); }
+.boton:disabled { opacity: 0.45; cursor: not-allowed; }
+.zona-mapa.editando .mapa { border-radius: var(--radio-m) var(--radio-m) 0 0; }
+@media (max-width: 767px) {
+  .zona-mapa.editando {
+    position: fixed; inset: 0; z-index: 80;
+    display: flex; flex-direction: column;
+    background: var(--fondo);
+  }
+  .zona-mapa.editando .mapa-envoltura { flex: 1; min-height: 0; }
+  .zona-mapa.editando .mapa { height: 100%; border-radius: 0; border: 0; }
+  .zona-mapa.editando .editor { max-height: 55vh; overflow-y: auto; border-radius: var(--radio-m) var(--radio-m) 0 0; padding-bottom: calc(var(--e-4) + env(safe-area-inset-bottom, 0px)); }
+}
+@media (min-width: 768px) {
+  .zona-mapa.editando .mapa { height: 460px; }
+  .editor-botones { grid-template-columns: repeat(3, 1fr); }
+}
+.alerta-sim { margin-top: var(--e-4); background: var(--etq-sim-fondo); border-color: transparent; color: var(--tinta); }
+.alerta-sim .etq { margin-right: var(--e-1); }
+.pedir { display: grid; gap: var(--e-3); margin-top: var(--e-4); }
+.pedir h4 { margin: 0; font-size: var(--t-m); font-weight: 600; }
+.pedir code { font-size: var(--t-xs); background: var(--tarjeta-alta); padding: 0.1rem 0.35rem; border-radius: 4px; overflow-wrap: anywhere; }
+
 .confirmar { display: grid; gap: var(--e-4); }
 .corregir { display: grid; gap: var(--e-2); }
 .corregir[hidden] { display: none; }

@@ -20,10 +20,13 @@
 
   <script type="module">
     import { recomendar } from '../js/motor.js';
-    import { ultimoCicloSeco } from '../js/senales.js';
+    import { ultimoCicloSeco, calcularSenales } from '../js/senales.js';
+    import { areaM2, seCruza, poligonoDesdePuntos, centroide, parcelaActiva } from '../js/parcela.js';
 
     const leer = (n) => fetch(`../data/${n}.json`).then((r) => r.json());
-    const [reglas, cultivos, umbrales] = await Promise.all(['reglas', 'cultivos', 'umbrales'].map(leer));
+    const nombres = ['reglas', 'cultivos', 'umbrales', 'parcela', 'historia', 'clima', 'suelo'];
+    const [reglas, cultivos, umbrales, parcela, historia, clima, suelo] = await Promise.all(nombres.map(leer));
+    const datos = { reglas, cultivos, umbrales, parcela, historia, clima, suelo };
     const ids = (r) => r.opciones.map((o) => o.id);
     const LEGUMINOSAS = ['habichuela', 'gandul', 'caupi'];
 
@@ -68,6 +71,28 @@
       ['Extra: ultimoCicloSeco compara con el 80 % del promedio', () => {
         const ciclos = [{ ciclo: 1, mm: 400 }, { ciclo: 2, mm: 400 }, { ciclo: 3, mm: 250 }];
         return ultimoCicloSeco(ciclos, 0.8) === true && ultimoCicloSeco(ciclos.slice(0, 2), 0.8) === false && ultimoCicloSeco([], 0.8) === null;
+      }],
+      // Elegir mi parcela
+      ['Parcela propia: la historia prestada pasa a SIMULADO; la corrección del agricultor sigue REPORTADO', () => {
+        const s = calcularSenales(datos, { parcelaPropia: true });
+        const c = calcularSenales(datos, { parcelaPropia: true, confirmacion: { respuesta: 'no', ciclos: 2 } });
+        return ['ciclos_arroz_seguidos', 'tendencia_vigor', 'dias_descubierto_promedio', 'ultimo_anio_seco'].every((k) => s[k].etiqueta === 'SIMULADO')
+          && c.ciclos_arroz_seguidos.etiqueta === 'REPORTADO' && c.tendencia_vigor.etiqueta === 'SIMULADO';
+      }],
+      ['Parcela propia: área, centro y contorno cruzado', () => {
+        // Cuadrado de ~100 m × 100 m ≈ 1 ha ≈ 15.9 tareas
+        const p = [[19.55, -71.08], [19.55, -71.07905], [19.5509, -71.07905], [19.5509, -71.08]];
+        const pol = poligonoDesdePuntos(p);
+        const ha = areaM2(pol) / 10000;
+        const c = centroide(pol);
+        const cruzado = [[0, 0], [1, 1], [1, 0], [0, 1]];
+        return ha > 0.95 && ha < 1.05 && Math.abs(c.lat - 19.55045) < 1e-4 && seCruza(cruzado) && !seCruza([[0, 0], [1, 0], [1, 1], [0, 1]]);
+      }],
+      ['Parcela propia: parcelaActiva usa el contorno nuevo con etiqueta REPORTADO', () => {
+        const pol = poligonoDesdePuntos([[19.6, -71.1], [19.6, -71.099], [19.601, -71.099]]);
+        const a = parcelaActiva(parcela, { poligono_geojson: pol, centro: centroide(pol), guardada: 'x' });
+        const b = parcelaActiva(parcela, null);
+        return a.propia && a.etiqueta === 'REPORTADO' && a.centro.lat > 19.59 && !b.propia && b.etiqueta === parcela.etiqueta;
       }],
     ];
 

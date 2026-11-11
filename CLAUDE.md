@@ -126,6 +126,7 @@ la-parcela-recuerda/
 │   ├── motor.js             ← motor de reglas (sección 8)
 │   ├── senales.js           ← calcula señales a partir de los datos (sección 8.2)
 │   ├── historia.js          ← pantalla 1: mapa y línea de tiempo
+│   ├── parcela.js           ← parcela propia: geometría y guardado (pantalla 1, punto 6)
 │   ├── suelo.js             ← pantalla 2: pH, sal, lluvia, lectura en vivo
 │   ├── decision.js          ← pantalla 3: recomendación, simulador, impacto, WhatsApp
 │   ├── thingspeak.js        ← lectura del buzón con respaldo (sección 10)
@@ -180,6 +181,13 @@ Navegación con pestañas fijas abajo en celular y arriba en laptop: **1. Mi par
    - Promedio de días de tierra descubierta tras la cosecha.
 4. **Confirmación del agricultor:** pregunta "¿Esta historia es correcta?" con botones **Sí / En parte / No**. Si elige "En parte" o "No", muestra un campo para corregir los ciclos de arroz seguidos. La respuesta se guarda en `localStorage` (con try/catch) y, si hay corrección, el motor usa el número corregido con etiqueta `REPORTADO`.
 5. Texto de límite: "El satélite ve que algo pasó, pero no siempre por qué. Por eso tu confirmación es importante."
+6. **Elegir mi parcela** (aprobada por el equipo después de la primera versión; diseño en `IDEAS.md`):
+   - Botón **"Cambiar mi parcela"** debajo del mapa. Abre un modo edición (pantalla completa en celular) donde el agricultor marca las esquinas tocando el mapa, o moviendo el mapa hasta una cruz central y pulsando **"Marcar punto aquí"** (alternativa accesible con teclado). Botones: "Usar mi ubicación" (GPS), "Ir a Mao", "Deshacer punto", "Guardar mi parcela" y "Cancelar".
+   - Mientras marca: área en tareas y hectáreas en vivo. Avisos: contorno que se cruza (impide guardar), parcela muy grande (> 2 000 tareas) o muy pequeña (< 0.5 tareas), y lejos del punto de los datos de lluvia (> 25 km).
+   - Se guarda en `localStorage` (`lpr.parcela_propia`, con try/catch) con etiqueta `REPORTADO`. Cambian el mapa, la ficha de la portada (área, ubicación) y la parcela resaltada del dibujo, que toma la forma real del contorno. "Volver a la parcela piloto" la borra.
+   - **Simulación:** la historia del satélite no existe todavía para esa parcela. Se sigue mostrando la de `historia.json` con el aviso "Tu parcela todavía no tiene historia del satélite", y sus señales pasan a `SIMULADO` (salvo la corrección del agricultor, que sigue `REPORTADO`). La lluvia de POWER se mantiene `OBSERVADO`, con aviso si la parcela está a más de 25 km. El pH muestra el aviso "es de la parcela piloto".
+   - **"Pedir la historia real de esta parcela":** descarga `mi_parcela.geojson` (para AppEEARS) y muestra las coordenadas para los scripts.
+   - No usa backend ni llamadas externas nuevas; no hay lista de comunidades para no inventar coordenadas.
 
 ### Pantalla 2 — Mi suelo hoy (viene de CambiaCosecha + nuevo)
 
@@ -449,6 +457,8 @@ Función principal, documentada con JSDoc:
 
 En el simulador, las señales que el usuario mueve reemplazan a las reales y pasan a `SIMULADO`.
 
+Con una parcela propia (pantalla 1, punto 6), las señales que salen de `historia.json` (`ciclos_arroz_seguidos` sin corrección, `tendencia_vigor`, `dias_descubierto_promedio`, `ultimo_anio_seco`) pasan a `SIMULADO`.
+
 ### 8.3 Pruebas (`tests/motor.test.html`)
 
 Una página que corre casos y muestra ✔/✘. Casos mínimos:
@@ -597,6 +607,7 @@ Si tienes acceso a internet, corre `descargar_power.py` y `descargar_soilgrids.p
 - [ ] El simulador cambia la recomendación al instante y lo marca como SIMULADO.
 - [ ] Con ThingSpeak configurado, girar la perilla de sal en Wokwi cambia la recomendación en ≤ 30 s; sin conexión, la app sigue funcionando.
 - [ ] La confirmación o corrección del agricultor cambia la señal y la recomendación.
+- [ ] El agricultor puede marcar su parcela en el mapa; el área se calcula en vivo, se guarda en el celular y la historia prestada aparece como SIMULADO.
 - [ ] El botón de WhatsApp abre el mensaje con las dos opciones.
 - [ ] ES/EN cambia todos los textos.
 - [ ] Las 6 pruebas del motor pasan.

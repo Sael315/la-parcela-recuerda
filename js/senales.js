@@ -30,9 +30,10 @@ export function ultimoCicloSeco(porCiclo, fraccion) {
  * @param {Object} ctx
  * @param {{ph: number|null, sal: number|null, hora: string}|null} ctx.lectura  lectura del sensor simulado (en vivo o guardada)
  * @param {{respuesta: string|null, ciclos: number|null}|null} ctx.confirmacion  respuesta del agricultor
+ * @param {boolean} [ctx.parcelaPropia]  el agricultor marcó su parcela: la historia es prestada y pasa a SIMULADO
  * @returns {Object<string, Senal>}
  */
-export function calcularSenales(datos, { lectura = null, confirmacion = null } = {}) {
+export function calcularSenales(datos, { lectura = null, confirmacion = null, parcelaPropia = false } = {}) {
   const { suelo, historia, clima, parcela, umbrales } = datos;
   const s = {};
 
@@ -63,6 +64,12 @@ export function calcularSenales(datos, { lectura = null, confirmacion = null } =
 
   const etqCiclo = clima.lluvia_por_ciclo_etiqueta ?? etq(clima, 'OBSERVADO');
   s.ultimo_anio_seco = { valor: ultimoCicloSeco(clima.lluvia_por_ciclo_mm, umbrales.anio_seco_fraccion), etiqueta: etqCiclo, fuente: clima.fuente, fecha: clima.consultado ?? null };
+
+  // Parcela propia: la historia del satélite es de otra parcela, así que lo que sale de ella es simulado.
+  if (parcelaPropia) {
+    ['tendencia_vigor', 'dias_descubierto_promedio', 'ultimo_anio_seco'].forEach((k) => { s[k].etiqueta = 'SIMULADO'; });
+    if (!corregido) s.ciclos_arroz_seguidos.etiqueta = 'SIMULADO';
+  }
 
   const plagas = parcela.plagas_repetidas;
   s.plagas_repetidas = { valor: plagas?.valor ?? null, etiqueta: plagas?.etiqueta === 'EJEMPLO' ? 'EJEMPLO' : 'REPORTADO', fuente: null, fecha: null };
