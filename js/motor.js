@@ -72,9 +72,17 @@ function evaluar(cuando, s, umbrales) {
   return resultado;
 }
 
+/** Señales que se muestran siempre con un decimal, igual que en el resto de la app (6.0 dS/m, pH 7.2). */
+const CON_DECIMAL = ['sal_dsm', 'ph'];
+
 function rellenar(texto, s) {
   if (!texto) return texto;
-  return texto.replace(/\{(\w+)\}/g, (_, k) => (faltante(s[k]?.valor) ? `{${k}}` : String(s[k].valor)));
+  return texto.replace(/\{(\w+)\}/g, (_, k) => {
+    const v = s[k]?.valor;
+    if (faltante(v)) return `{${k}}`;
+    if (typeof v === 'number') return CON_DECIMAL.includes(k) ? v.toFixed(1) : String(Math.round(v));
+    return String(v);
+  });
 }
 
 /**
